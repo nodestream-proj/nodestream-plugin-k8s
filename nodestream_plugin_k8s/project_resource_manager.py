@@ -1,5 +1,5 @@
-from dataclasses import dataclass, fields, asdict
-from typing import Iterable, Optional, List
+from dataclasses import asdict, dataclass, fields
+from typing import Iterable, List, Optional
 
 from nodestream.project import PipelineDefinition, Project
 

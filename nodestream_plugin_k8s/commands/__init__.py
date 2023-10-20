@@ -3,7 +3,7 @@ from .list_command import ListCommand
 from .sync_command import SyncCommand
 
 __all__ = (
-    'DestroyCommand',
-    'ListCommand',
-    'SyncCommand',
+    "DestroyCommand",
+    "ListCommand",
+    "SyncCommand",
 )

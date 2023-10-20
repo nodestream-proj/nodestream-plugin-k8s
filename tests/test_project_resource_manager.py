@@ -1,11 +1,10 @@
 import pytest
-
-from nodestream.project import Project, PipelineScope, PipelineDefinition
+from nodestream.project import PipelineDefinition, PipelineScope, Project
 
 from nodestream_plugin_k8s.project_resource_manager import (
-    ProjectResourceManager,
+    PipelineDesiredState,
     PipelineResourceManager,
-    PipelineDesiredState
+    ProjectResourceManager,
 )
 
 

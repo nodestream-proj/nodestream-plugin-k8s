@@ -3,12 +3,12 @@ from typing import Iterable
 
 from nodestream.cli import NodestreamCommand
 from nodestream.cli.commands.shared_options import (
+    JSON_OPTION,
     PROJECT_FILE_OPTION,
     SCOPE_NAME_OPTION,
-    JSON_OPTION,
 )
 
-from ..project_resource_manager import ProjectResourceManager, PipelineDesiredState
+from ..project_resource_manager import PipelineDesiredState, ProjectResourceManager
 
 
 class ListCommand(NodestreamCommand):
@@ -36,7 +36,10 @@ class ListCommand(NodestreamCommand):
     async def handle_async(self):
         project_manager = ProjectResourceManager(self.get_project())
         scope_name = self.option(SCOPE_NAME_OPTION.name)
-        items_to_display = (mgr.desired_state for mgr in project_manager.get_managed_pipelines(scope_name))
+        items_to_display = (
+            mgr.desired_state
+            for mgr in project_manager.get_managed_pipelines(scope_name)
+        )
         use_json = self.option(JSON_OPTION.name)
         render_method = self.display_as_json if use_json else self.display_as_table
         render_method(items_to_display)
