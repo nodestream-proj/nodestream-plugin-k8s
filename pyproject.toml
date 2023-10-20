@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "nodestream-plugin-k8s"
+version = "0.8.0"
+description = "A plugin for nodestream that manages k8s resources."
+authors = ["Zach Probst <Zach_Probst@intuit.com>"]
+readme = "README.md"
+license = "Apache 2.0"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+nodestream = "^0.8.2"
+
+[tool.poetry.plugins."nodestream.plugins"]
+commands = "nodestream_plugin_k8s.commands"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.2"
+pytest-cov = "^4.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
