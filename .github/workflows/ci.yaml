@@ -25,12 +25,12 @@ jobs:
           poetry env use ${{ matrix.python-version }}
           poetry install
       - name: Run Tests
-        run: poetry run pytest --cov nodestream_plugin_pedantic --cov-report term --cov-report xml
+        run: poetry run pytest --cov nodestream_plugin_k8s --cov-report term --cov-report xml
       - name: Run Lints
         run: |
-          poetry run ruff nodestream_plugin_pedantic tests
-          poetry run black nodestream_plugin_pedantic tests --check
-          poetry run isort nodestream_plugin_pedantic tests --check-only
+          poetry run ruff nodestream_plugin_k8s tests
+          poetry run black nodestream_plugin_k8s tests --check
+          poetry run isort nodestream_plugin_k8s tests --check-only
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
