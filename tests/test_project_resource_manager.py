@@ -1,5 +1,10 @@
 import pytest
-from nodestream.project import PipelineDefinition, PipelineScope, Project
+from nodestream.project import (
+    PipelineConfiguration,
+    PipelineDefinition,
+    PipelineScope,
+    Project,
+)
 
 from nodestream_plugin_k8s.project_resource_manager import (
     PipelineDesiredState,
@@ -18,16 +23,20 @@ def project():
                     PipelineDefinition(
                         name="test_pipeline_1",
                         file_path="crons/test_pipeline_1",
-                        annotations={
-                            "nodestream_plugin_k8s_schedule": "*/5 * * * *",
-                        },
+                        configuration=PipelineConfiguration(
+                            annotations={
+                                "nodestream_plugin_k8s_schedule": "*/5 * * * *",
+                            },
+                        ),
                     ),
                     PipelineDefinition(
                         name="test_pipeline_2",
                         file_path="crons/test_pipeline_2",
-                        annotations={
-                            "nodestream_plugin_k8s_schedule": "*/5 * * * *",
-                        },
+                        configuration=PipelineConfiguration(
+                            annotations={
+                                "nodestream_plugin_k8s_schedule": "*/5 * * * *",
+                            }
+                        ),
                     ),
                 ],
             ),
@@ -37,9 +46,11 @@ def project():
                     PipelineDefinition(
                         name="test_pipeline_3",
                         file_path="deployments/test_pipeline_3",
-                        annotations={
-                            "nodestream_plugin_k8s_conccurency": 4,
-                        },
+                        configuration=PipelineConfiguration(
+                            annotations={
+                                "nodestream_plugin_k8s_conccurency": 4,
+                            }
+                        ),
                     ),
                 ],
             ),
