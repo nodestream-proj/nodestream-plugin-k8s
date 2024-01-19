@@ -32,13 +32,15 @@ class PipelineResourceManager:
 
     @staticmethod
     def is_managable(definition: PipelineDefinition) -> bool:
-        annotations = definition.annotations.keys()
+        annotations = definition.configuration.effective_annotations.keys()
         return not annotations.isdisjoint(KUBERNETES_MANAGEMENT_ANNOTATIONS)
 
     @property
     def desired_state(self) -> PipelineDesiredState:
-        cron_schedule = self.definition.annotations.get(CRON_SCHEDULE_ANNOTATION_NAME)
-        perpetual_concurrency = self.definition.annotations.get(
+        cron_schedule = self.definition.configuration.effective_annotations.get(
+            CRON_SCHEDULE_ANNOTATION_NAME
+        )
+        perpetual_concurrency = self.definition.configuration.effective_annotations.get(
             PERPETUAL_CONCURRENCY_ANNOTATION_NAME
         )
         return PipelineDesiredState(
