@@ -5,10 +5,12 @@ from nodestream.project import PipelineDefinition, Project
 
 CRON_SCHEDULE_ANNOTATION_NAME = "nodestream_plugin_k8s_schedule"
 PERPETUAL_CONCURRENCY_ANNOTATION_NAME = "nodestream_plugin_k8s_conccurency"
+DEBUG_ANNOTATION_NAME = "nodestream_plugin_k8s_debug"
 
 KUBERNETES_MANAGEMENT_ANNOTATIONS = {
     CRON_SCHEDULE_ANNOTATION_NAME,
     PERPETUAL_CONCURRENCY_ANNOTATION_NAME,
+    DEBUG_ANNOTATION_NAME,
 }
 
 
@@ -17,6 +19,8 @@ class PipelineDesiredState:
     pipeline_name: str
     cron_schedule: Optional[str] = None
     perpetual_concurrency: Optional[int] = None
+    debug_enabled: Optional[bool] = False
+    suspend: Optional[bool] = False
 
     @classmethod
     def field_names(cls) -> List[str]:
@@ -40,13 +44,22 @@ class PipelineResourceManager:
         cron_schedule = self.definition.configuration.effective_annotations.get(
             CRON_SCHEDULE_ANNOTATION_NAME
         )
+
         perpetual_concurrency = self.definition.configuration.effective_annotations.get(
             PERPETUAL_CONCURRENCY_ANNOTATION_NAME
         )
+        debug_enabled = (
+            self.definition.configuration.effective_annotations.get(
+                DEBUG_ANNOTATION_NAME
+            )
+            or False
+        )
+
         return PipelineDesiredState(
             pipeline_name=self.definition.name,
             cron_schedule=cron_schedule,
             perpetual_concurrency=perpetual_concurrency,
+            debug_enabled=debug_enabled,
         )
 
 
