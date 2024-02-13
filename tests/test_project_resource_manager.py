@@ -16,11 +16,11 @@ from nodestream_plugin_k8s.project_resource_manager import (
 @pytest.fixture
 def project():
     return Project(
-        scopes=[
-            PipelineScope(
+        scopes_by_name={
+            "crons": PipelineScope(
                 name="crons",
-                pipelines=[
-                    PipelineDefinition(
+                pipelines_by_name={
+                    "test_pipeline_1": PipelineDefinition(
                         name="test_pipeline_1",
                         file_path="crons/test_pipeline_1",
                         configuration=PipelineConfiguration(
@@ -29,7 +29,7 @@ def project():
                             },
                         ),
                     ),
-                    PipelineDefinition(
+                    "test_pipeline_2": PipelineDefinition(
                         name="test_pipeline_2",
                         file_path="crons/test_pipeline_2",
                         configuration=PipelineConfiguration(
@@ -38,12 +38,12 @@ def project():
                             }
                         ),
                     ),
-                ],
+                },
             ),
-            PipelineScope(
+            "deployments": PipelineScope(
                 name="deployments",
-                pipelines=[
-                    PipelineDefinition(
+                pipelines_by_name={
+                    "test_pipeline_3": PipelineDefinition(
                         name="test_pipeline_3",
                         file_path="deployments/test_pipeline_3",
                         configuration=PipelineConfiguration(
@@ -52,18 +52,43 @@ def project():
                             }
                         ),
                     ),
-                ],
+                },
             ),
-            PipelineScope(
+            "development": PipelineScope(
+                name="development",
+                pipelines_by_name={
+                    "development_pipeline_3": PipelineDefinition(
+                        name="development_pipeline_3",
+                        file_path="deployments/development_pipeline_3",
+                        configuration=PipelineConfiguration(
+                            annotations={
+                                "nodestream_plugin_k8s_schedule": "*/5 * * * *",
+                                "nodestream_plugin_k8s_debug": True,
+                            }
+                        ),
+                    ),
+                    "development_pipeline_4": PipelineDefinition(
+                        name="development_pipeline_4",
+                        file_path="deployments/development_pipeline_4",
+                        configuration=PipelineConfiguration(
+                            annotations={
+                                "nodestream_plugin_k8s_conccurency": 4,
+                                "nodestream_plugin_k8s_debug": True,
+                            }
+                        ),
+                    ),
+                },
+            ),
+            "other": PipelineScope(
                 name="other",
-                pipelines=[
-                    PipelineDefinition(
+                pipelines_by_name={
+                    "test_pipeline_4": PipelineDefinition(
                         name="test_pipeline_4",
                         file_path="other/test_pipeline_4",
                     ),
-                ],
+                },
             ),
-        ],
+        },
     )
 
 
@@ -86,9 +111,27 @@ def cron_resource_manager(project):
     )
 
 
+@pytest.fixture
+def development_cron_resource_manager(project):
+    return PipelineResourceManager(
+        project.scopes_by_name["development"].pipelines_by_name[
+            "development_pipeline_3"
+        ]
+    )
+
+
+@pytest.fixture
+def development_perpetual_resource_manager(project):
+    return PipelineResourceManager(
+        project.scopes_by_name["development"].pipelines_by_name[
+            "development_pipeline_4"
+        ]
+    )
+
+
 def test_get_managed_pipelines(project_resource_manager):
     managed_pipelines = list(project_resource_manager.get_managed_pipelines())
-    assert len(managed_pipelines) == 3
+    assert len(managed_pipelines) == 5
 
 
 def test_pipeline_resource_manager_cron_desired_state(cron_resource_manager):
@@ -104,4 +147,22 @@ def test_pipeline_resource_manager_perpetual_desired_state(perpetual_resource_ma
         pipeline_name="test_pipeline_3",
         cron_schedule=None,
         perpetual_concurrency=4,
+        debug_enabled=False,
+    )
+
+
+def test_developement_desired_state(
+    development_cron_resource_manager, development_perpetual_resource_manager
+):
+    assert development_cron_resource_manager.desired_state == PipelineDesiredState(
+        pipeline_name="development_pipeline_3",
+        cron_schedule="*/5 * * * *",
+        perpetual_concurrency=None,
+        debug_enabled=True,
+    )
+    assert development_perpetual_resource_manager.desired_state == PipelineDesiredState(
+        pipeline_name="development_pipeline_4",
+        cron_schedule=None,
+        perpetual_concurrency=4,
+        debug_enabled=True,
     )
