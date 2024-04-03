@@ -16,11 +16,11 @@ from nodestream_plugin_k8s.project_resource_manager import (
 @pytest.fixture
 def project():
     return Project(
-        scopes=[
-            PipelineScope(
+        scopes_by_name={
+            "crons": PipelineScope(
                 name="crons",
-                pipelines=[
-                    PipelineDefinition(
+                pipelines_by_name={
+                    "test_pipeline_1": PipelineDefinition(
                         name="test_pipeline_1",
                         file_path="crons/test_pipeline_1",
                         configuration=PipelineConfiguration(
@@ -29,7 +29,7 @@ def project():
                             },
                         ),
                     ),
-                    PipelineDefinition(
+                    "test_pipeline_2": PipelineDefinition(
                         name="test_pipeline_2",
                         file_path="crons/test_pipeline_2",
                         configuration=PipelineConfiguration(
@@ -38,12 +38,12 @@ def project():
                             }
                         ),
                     ),
-                ],
+                },
             ),
-            PipelineScope(
+            "deployments": PipelineScope(
                 name="deployments",
-                pipelines=[
-                    PipelineDefinition(
+                pipelines_by_name={
+                    "test_pipeline_3": PipelineDefinition(
                         name="test_pipeline_3",
                         file_path="deployments/test_pipeline_3",
                         configuration=PipelineConfiguration(
@@ -52,18 +52,18 @@ def project():
                             }
                         ),
                     ),
-                ],
+                },
             ),
-            PipelineScope(
+            "other": PipelineScope(
                 name="other",
-                pipelines=[
-                    PipelineDefinition(
+                pipelines_by_name={
+                    "test_pipeline_4": PipelineDefinition(
                         name="test_pipeline_4",
                         file_path="other/test_pipeline_4",
                     ),
-                ],
+                },
             ),
-        ],
+        },
     )
 
 
