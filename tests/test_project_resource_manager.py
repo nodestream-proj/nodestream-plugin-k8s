@@ -38,7 +38,7 @@ def project():
                             }
                         ),
                     ),
-                }
+                },
             ),
             "deployments": PipelineScope(
                 name="deployments",
