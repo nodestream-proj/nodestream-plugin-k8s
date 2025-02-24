@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nodestream-plugin-k8s"
-version = "0.13.0"
+version = "0.14.0"
 description = "A plugin for nodestream that manages k8s resources."
 authors = ["Zach Probst <Zach_Probst@intuit.com>"]
 readme = "README.md"
