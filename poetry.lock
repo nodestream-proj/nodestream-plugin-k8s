@@ -1503,4 +1503,4 @@ test = ["Cython (>=0.29.36,<0.30.0)", "aiohttp (==3.9.0b0)", "aiohttp (>=3.8.1)"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "6ad363049608023949adfbd9888c1206a405d04ea1dd25a46761916754e9413c"
+content-hash = "59f51deaf76891f60abf2759abda181bccfeb02bf64595469e7490b510cb7537"
